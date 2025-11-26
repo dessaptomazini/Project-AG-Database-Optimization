@@ -1,0 +1,83 @@
+📊 Portfólio de Dashboards: Estrutura e Racional de Negócio
+Este projeto foi segmentado em 6 painéis distintos, cada um atendendo a uma necessidade específica de gestão e análise, desde a visão executiva até a auditoria técnica.
+
+1. Painel Gerencial (Visão Executiva Macro)
+Objetivo: Monitoramento de alto nível da saúde financeira e operacional dos processos de recuperação de crédito tributário.
+
+KPIs:
+Total de Serviços Prestados (Volumetria Geral).
+Total de Clientes Atendidos.
+Total de Processos de Crédito Ativos.
+Total de Produtos (Teses Jurídicas).
+Ticket Médio por Processo.
+Total de Honorários Faturados.
+
+Perguntas de Negócio: "Qual o tamanho da nossa operação hoje?", "Quanto estamos gerando de receita (honorários)?", "Qual é o valor médio que recuperamos por processo?".
+Decisões: Planejamento estratégico de expansão, alocação de recursos e definição de metas financeiras globais.
+
+2. Painel de Gestão de Crédito (Visão Operacional)
+Objetivo: Detalhamento da performance operacional da recuperação de créditos, focando no status e composição dos valores.
+
+KPIs & Visuais:
+Volume de Crédito por Status (Compensação vs. Restituição).
+Qtd. de Processos por Status.
+Composição do Crédito (Principal, Juros, Multa) – Gráfico de Área/Treemap.
+Top 7 Clientes com mais Processos.
+Evolução Temporal de Processos e Valores (Gráfico de Combinação: Barras + Linha).
+Taxa de Reconhecimento de Crédito (Reconhecido vs. Analisado) – Gráfico de Rosca.
+
+Perguntas de Negócio: "A maioria dos nossos créditos é compensada ou restituída?", "Quais clientes demandam mais esforço operacional?", "Como está a evolução do volume de processos ano a ano?".
+Decisões: Priorização de filas de trabalho (Compensação x Restituição), gestão de relacionamento com grandes contas e análise de eficiência da equipe jurídica.
+
+3. Análise Financeira (Visão de Rentabilidade)
+Objetivo: Cruzamento crítico entre o esforço jurídico (Créditos Recuperados) e o retorno financeiro (Honorários), analisando a rentabilidade por produto e cliente.
+
+KPIs & Visuais:
+Total Honorários vs. Total Crédito Recuperado.
+% Honorários sobre Crédito (Taxa média de sucesso).
+Evolução Mensal de Honorários.
+Top 10 Produtos (Teses) por Faturamento.
+Top 10 Clientes por Faturamento de Honorários.
+Correlação Crédito x Honorários ao longo do tempo.
+
+Perguntas de Negócio: "Quais produtos (teses) são mais rentáveis?", "Existem clientes com alto volume de crédito mas baixo retorno de honorários?", "Qual é a sazonalidade do nosso faturamento?".
+Decisões: Foco comercial nos produtos mais rentáveis, renegociação de contratos com clientes de baixa margem e previsão de fluxo de caixa.
+
+4. Volumetria & Processos (Análise Temporal e Sazonalidade)
+Objetivo: Entendimento profundo do comportamento temporal da carteira, identificando tendências de crescimento e sazonalidade.
+
+KPIs & Visuais:
+Matriz de Calor (Heatmap) de Competência/Data.
+Evolução do Crédito em Análise por Ano.
+Tabela detalhada ano a ano (Crescimento YoY, Qtd Processos, Tickets Médios).
+Volumetria Mensal de Processos (Gráfico de Linha para identificar picos).
+Curva de Clientes Atendidos por Ano.
+
+Perguntas de Negócio: "Estamos crescendo ou diminuindo em relação ao ano anterior (YoY)?", "Existem meses específicos com picos de demanda?", "A complexidade (ticket médio) dos processos está aumentando?".
+Decisões: Planejamento de capacidade da equipe (contratações temporárias em picos), avaliação da eficácia de campanhas comerciais e projeção de crescimento futuro.
+
+5. Painel do Cliente (Relatório Externo/Portal)
+Objetivo: Transparência e prestação de contas. Uma visão simplificada e filtrável destinada a ser exportada e enviada ao cliente final.
+
+Funcionalidade: Filtros robustos de busca (CNPJ, Nome, Processo).
+
+KPIs & Visuais:
+Resumo Financeiro do Cliente (Crédito, Reconhecido, Compensado, Honorários).
+Extrato Detalhado: Tabela granular com produto, valores e status.
+Detalhamento de Honorários por Produto e por Processo.
+
+Perguntas de Negócio (do Cliente): "Quanto vocês recuperaram para mim?", "Quanto eu paguei de honorários em cada processo específico?", "Qual o status atual dos meus créditos?".
+Decisões: Aumenta a confiança do cliente, reduz o tempo de atendimento da equipe (autoatendimento/relatório rápido) e facilita a validação de faturas.
+
+6. Data Quality Dashboard (Auditoria e Governança)
+Objetivo: Monitoramento técnico da integridade dos dados, garantindo a confiabilidade de todos os outros painéis.
+
+KPIs & Visuais:
+Contagem de Nulos e Brancos em campos críticos (CNPJ, Razão Social, Valores).
+Identificação de Duplicidades (CNPJs duplicados, Processos repetidos).
+Rastreabilidade de Erros: Tabela que mostra exatamente em qual arquivo de origem (Localização) está o erro (ex: Multa inconsistente).
+Auditoria de Regras de Negócio: "Multa abaixo de 20%" ou "Multa acima de 20%" (outliers).
+Validação de Nomes de Clientes (Padronização).
+
+Perguntas de Negócio: "Podemos confiar nos números apresentados?", "Existem arquivos mensais com dados corrompidos ou incompletos?", "Onde precisamos agir para corrigir a base?".
+Decisões: Ação corretiva imediata na fonte dos dados (arquivos Excel), melhoria contínua dos processos de entrada de dados e garantia de compliance.
