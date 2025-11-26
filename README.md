@@ -1,13 +1,11 @@
 📊 Projeto de Centralização e Saneamento de 5 anos de dados Financeiros/Jurídicos
 
-🎯 O Desafio de Negócio
+🎯 O Desafio de Negócio: 
 O departamento jurídico enfrentava dificuldades na consolidação de dados de créditos tributários provenientes de múltiplas planilhas mensais descentralizadas. Os principais problemas eram:
 
-Duplicidade de Clientes e CNPJ: O mesmo cliente aparecia com grafias diferentes em arquivos diferentes (ex: "Empresa X Ltda", "Empresa X", "Empresa X - 123"), impedindo uma visão consolidada.
-
-Processo Manual: Inexistência de qualquer dashboard impedindo análise de qualquer natureza (financeira, volume de trabalho, tempo e sazonalidade de demanda) por 5 anos.
-
-Conexão de Dados Complexa: Dificuldade em cruzar dados de processos jurídicos (base interna) com dados de faturamento e honorários (dataset financeiro externo) devido à falta de chaves únicas padronizadas.
+- Duplicidade de Clientes e CNPJ: O mesmo cliente aparecia com grafias diferentes em arquivos diferentes (ex: "Empresa X Ltda", "Empresa X", "Empresa X - 123"), impedindo uma visão consolidada.
+- Processo Manual: Inexistência de qualquer dashboard impedindo análise de qualquer natureza (financeira, volume de trabalho, tempo e sazonalidade de demanda) por 5 anos.
+- Conexão de Dados Complexa: Dificuldade em cruzar dados de processos jurídicos (base interna) com dados de faturamento e honorários (dataset financeiro externo) devido à falta de chaves únicas padronizadas.
 
 💡 A Solução Implementada
 
