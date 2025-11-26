@@ -1,0 +1,142 @@
+SQL_COLUMN_NAME
+Data do Último Processo = & FORMAT( MAX(fBaseCreditos[Data de Emissão]), "dd/MM/yyyy")
+
+% Nº Proc Crédito Preenchido = DIVIDE([Processo de Crédito.f], [Qtd Total de Linhas])
+
+% Valor Crédito Preenchido = DIVIDE([Valor do Crédito.f], [Qtd Total de Linhas])
+
+Valor Crédito Compensação = CALCULATE([Total Crédito], fBaseCrédito'[Classificação]="Compensação")
+
+Valor Crédito Restituição = CALCULATE([Total Crédito], fBaseCrédito'[Classificação]="Restituição")
+
+Valor Ano Anterior = CALCULATE([Valor Total Credito],SAMEPERIODLASTYEAR ( 'dCalendario'[Date] ))
+
+Qtd Processos Compensação = CALCULATE([Qtd Processos],'fBaseCreditos'[Classificação] = "Compensação")
+
+Qtd Processos Restituição = CALCULATE([Qtd Processos],'fBaseCreditos'[Classificação] = Restituição")
+
+PY Qtd Processos = CALCULATE([Qtd Processos],SAMEPERIODLASTYEAR('dCalendario'[Date]))
+
+PY Valor total Credito = CALCULATE([Valor Total Credito],SAMEPERIODLASTYEAR('dCalendario'[Date]))
+
+Valor Credito Media Movel 3M = CALCULATE(AVERAGEX(VALUES('dCalendario'[Ano Mes]),[Valor Total Credito]),DATESINPERIOD('dCalendario'[Date],LASTDATE('dCalendario'[Date]),-3 MONTH))
+
+Juros.f = CALCULATE(COUNTBLANK('fBaseCreditos'[Juros]),'fBaseCreditos'[Classificação] = "Compensação")
+
+Multa.f = CALCULATE(COUNTBLANK('fBaseCreditos'[Multa]),'fBaseCreditos'[Classificação] = "Compensação")
+
+Principal.f = CALCULATE(COUNTBLANK('fBaseCreditos'[Principal]),'fBaseCreditos'[Classificação] = "Compensação")
+
+Qtd total Serviços = COUNT ('fin_negocios_produtos_view' [produto])
+
+Qtd Empresas.c = COUNT('fBaseCreditos'[Cliente])
+
+Qtd Razão Social total = COUNT('fBaseCreditos'[Cliente])
+
+Razão Social.f = COUNTBLANK('fBaseCreditos'[Cliente])
+
+Qtd CNPJ Faltante = COUNTBLANK('fBaseCreditos'[CNPJ/CPF])
+
+Processo de Crédito.f = COUNTBLANK('fBaseCreditos'[Nº do Processo de Crédito])
+
+Qtd Nº Processo Crédito Faltante = COUNTBLANK('fBaseCreditos'[Nº do Processo de Crédito])
+
+Valor do Crédito.f = COUNTBLANK('fBaseCreditos'[Valor do crédito])
+
+Qtd_CNPJs_Nulos = COUNTROWS(FILTER(fBaseCreditos,ISBLANK(fBaseCreditos[CNPJ/CPF]) || fBaseCreditos[CNPJ/CPF] = ""))
+
+Total de Linhas = COUNTROWS('fBaseCreditos')
+
+Qtd Total de Linhas = COUNTROWS('fBaseCreditos')
+
+Qtd Razão Social Únicas = DISTINCTCOUNT(fBaseCreditos[Cliente])
+
+Qtd CNPJs Únicos = DISTINCTCOUNT(fBaseCreditos[CNPJ/CPF])
+
+Qtd Processos = DISTINCTCOUNT('fBaseCreditos'[Nº do Processo de Crédito])
+
+Qtd Produtos = DISTINCTCOUNT('fin_negocios_produtos_view'[produto])
+
+Qtd Produtos por Processo = DISTINCTCOUNT('fin_negocios_produtos_view'[produto])
+
+Ticket Médio (Crédito) = DIVIDE ( [Valor Total Credito], [Qtd Processos] )
+
+Ticket Médio (Honorários) = DIVIDE ([Total Honorários],[Qtd Processos])
+ 
+% Honorários sobre Crédito = DIVIDE ([Total Honorários],[Total Crédito])
+
+Parâmetro Valor = EXTERNALMEASURE("Parâmetro Valor", INTEGER, "DirectQuery para AS – Dataset_Datalake_SistemaFinanceiro")
+
+Sinalizador Multa < 20% = IF (SUM ( fBaseCreditos[Multa] ) < ( SUM ( fBaseCreditos[Principal] ) * 0.20 ), 1 0 )
+SUM ( fBaseCreditos[Multa] ) < ( SUM ( fBaseCreditos[Principal] ) * 0.20 ),
+
+Valor Total Juros = SUM('fBaseCreditos'[Juros])
+
+Valor Total Multas = SUM('fBaseCreditos'[Multa])
+
+Valor Total Principal = SUM('fBaseCreditos'[Principal])
+
+Total Crédito Reconhecido = SUM('fBaseCreditos'[Valor do crédito reconhecido])
+
+Valor Total Credito = SUM('fBaseCreditos'[Valor do crédito])
+
+Total Crédito = SUM('fBaseCreditos'[Valor do crédito])
+
+Total Honorários por produto = SUM(fin_faturamento_com_emissor_view[valor nota])
+
+Total Honorários = SUM(nota_fiscal[valor_total_servicos])
+
+Qtd Processos YTD =  TOTALYTD(   [Qtd Processos],   'dCalendario'[Date])
+
+KPI - Crescimento YoY (Último Ano) = VAR AnoAtual = YEAR ( TODAY() )
+VAR UltimoAnoFechado = AnoAtual - 1  
+VAR Resultado =
+   CALCULATE (
+       [Crescimento Valor YoY %],      
+       FILTER (
+           ALL ( 'dCalendario'[Ano] ),   
+           'dCalendario'[Ano] = UltimoAnoFechado
+       )
+   )
+RETURN
+   Resultado
+
+KPI - Valor YTD (Ano Atual) = VAR AnoAtual = YEAR ( TODAY() ) 
+VAR Resultado =
+   CALCULATE (
+       [Valor Total Credito],      
+       FILTER (
+           ALL ( 'dCalendario'[Ano] ),  
+           'dCalendario'[Ano] = AnoAtual
+       )
+   )
+RETURN
+   Resultado
+
+Crescimento Qtd Processos YoY % = VAR QtdAnoAtual = [Qtd Processos]
+VAR QtdAnoAnterior = [PY Qtd Processos]
+RETURN
+   DIVIDE ( ( QtdAnoAtual - QtdAnoAnterior ), QtdAnoAnterior )
+
+Qtd Processos Repetidos = VAR TabelaContagem =
+   ADDCOLUMNS (
+       VALUES ( 'fBaseCreditos'[Nº do Processo de Crédito] ),
+       "@ContagemLinhas", CALCULATE ( COUNTROWS ( 'fBaseCreditos' ) )
+   )
+VAR TabelaFiltrada =
+   FILTER ( TabelaContagem, [@ContagemLinhas] > 1 )
+RETURN
+   COUNTROWS ( TabelaFiltrada )
+
+Crescimento Valor YoY % = 
+VAR ValorAtual = [Valor Total Credito]
+VAR ValorAnterior = [Valor Ano Anterior]
+VAR Crescimento = ValorAtual - ValorAnterior
+
+RETURN
+   DIVIDE ( Crescimento, ValorAnterior )
+
+
+
+
+
