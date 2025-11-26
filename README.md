@@ -10,6 +10,7 @@ Processo Manual: Inexistência de qualquer dashboard impedindo análise de qualq
 Conexão de Dados Complexa: Dificuldade em cruzar dados de processos jurídicos (base interna) com dados de faturamento e honorários (dataset financeiro externo) devido à falta de chaves únicas padronizadas.
 
 💡 A Solução Implementada
+
 Desenvolvi uma solução de BI ponta a ponta ("End-to-End") focada em Engenharia de Dados no Power Query para garantir a integridade da informação antes da visualização.
 
 🛠️ Principais Técnicas Utilizadas
@@ -25,6 +26,7 @@ Para resolver a duplicidade de nomes, criei uma lógica avançada no Power Query
 - Agrupa todas as variações de nomes encontradas para aquele CNPJ.
 - Aplica uma lógica para selecionar automaticamente o nome mais completo (maior string de texto) como o "Nome Oficial".
 - Realiza uma limpeza robusta de caracteres especiais e números indesejados nos nomes.
+- Identifica novos clientes/CNPJ acrescentados na base e faz a limpeza antes da inserção na tabela fato para evitar contaminação da base que alimenta os visuais.
 
 Resultado: Uma dimensão de clientes única e limpa que retroalimenta a tabela fato, eliminando duplicatas nos relatórios.
 
@@ -32,6 +34,18 @@ Resultado: Uma dimensão de clientes única e limpa que retroalimenta a tabela f
 Criação de uma tabela dimensão calendário (dCalendario) para análises temporais.
 
 Resolução de relacionamentos complexos ("Muitos-para-Muitos") entre Notas Fiscais e Processos utilizando uma tabela ponte de CNPJs únicos (Dim_CNPJ_CPF) criada via DAX, garantindo a integridade dos filtros cruzados.
+
+🛡️ Governança e Data Quality Control
+Para garantir a confiabilidade dos dados apresentados, foi desenvolvido um painel exclusivo de Controle de Qualidade de Dados.
+
+Funcionalidades de Auditoria:
+Rastreabilidade de Origem: Implementação de colunas de metadados (Localização e Emissão) no Power Query que identificam exatamente de qual arquivo mensal (ex: "AGOSTO 2025.xlsx") cada registro se originou.
+
+Detecção de Inconsistências:
+-Monitoramento de CNPJs inválidos ou nulos.
+-Validação cruzada entre a base de Créditos e a base de Notas Fiscais.
+-Alertas visuais para registros que falharam na padronização automática.
+-Preenchimento Reverso (Data Healing): Algoritmo que utiliza a base histórica de clientes validados (Dim_Clientes_Final) para preencher automaticamente informações faltantes (como CNPJs nulos) na base de fatos, baseado no nome do cliente.
 
 📂 Estrutura dos Arquivos
 Este repositório contém apenas os scripts de lógica (devido à confidencialidade dos dados):
