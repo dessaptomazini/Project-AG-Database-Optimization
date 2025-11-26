@@ -1,0 +1,24 @@
+let
+    // 1. Fonte: Sua base de dados bruta
+    Fonte = Dados_Brutos_Unificados,
+    
+    // 2. Mesclagem LeftAnti: Encontra linhas na Fonte que NÃO estão em Oficial_Clientes
+    #"Mesclar com Oficial_Clientes" = Table.NestedJoin(
+        Fonte, 
+        {"CNPJ/CPF"}, 
+        Oficial_Clientes, 
+        {"CNPJ/CPF"}, 
+        "Oficial_Clientes_Join", 
+        JoinKind.LeftAnti
+    ),
+    
+    // 3. Remove a coluna da mesclagem, deixando apenas os "novos"
+    #"Colunas Removidas" = Table.RemoveColumns(#"Mesclar com Oficial_Clientes",{"Oficial_Clientes_Join"}),
+    
+    // 4. Seleciona apenas as colunas essenciais para o dicionário final
+    #"Selecionar Colunas Chave" = Table.SelectColumns(#"Colunas Removidas",{"CNPJ/CPF", "Cliente"}),
+    
+    // 5. Remove linhas duplicadas de CNPJ/CPF (mantém a primeira ocorrência do nome do cliente)
+    #"Duplicatas Removidas" = Table.Distinct(#"Selecionar Colunas Chave", {"CNPJ/CPF"})
+in
+    #"Duplicatas Removidas"
