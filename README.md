@@ -1,4 +1,4 @@
-📊 Projeto de Automação e Saneamento de Dados Financeiros/Jurídicos
+📊 Projeto de Centralização e Saneamento de 5 anos de dados Financeiros/Jurídicos
 
 🎯 O Desafio de Negócio
 O departamento jurídico enfrentava dificuldades na consolidação de dados de créditos tributários provenientes de múltiplas planilhas mensais descentralizadas. Os principais problemas eram:
