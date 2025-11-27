@@ -9,11 +9,11 @@ let
     #"Coluna de Tabela Expandida1" = Table.ExpandTableColumn(#"Outras Colunas Removidas1", "Transformar Arquivo (2)", Table.ColumnNames(#"Transformar Arquivo (2)"(#"Arquivo de Amostra (2)"))),
     #"Tipo Alterado" = Table.TransformColumnTypes(#"Coluna de Tabela Expandida1",{{"Nome da Origem", type text}, {"Fonte", type text}, {"Cod. Rastreamento Correios", type text}, {"Nº da comunicação", type text}, {"DRF", type text}, {"Data de Emissão", type date}, {"CNPJ/CPF", type text}, {"Cliente", type text}, {"Data PER/DECOMP", type date}, {"PER/DCOMP Demonstrativo de Crédito", type text}, {"Período de Apuração", type date}, {"Nº do Processo de Crédito", type text}, {"Valor do crédito", type number}, {"Valor do crédito reconhecido", type number}, {"Valor total do pagamento", type any}, {"Valor total utilizado", type any}, {"Principal", type number}, {"Multa", type number}, {"Juros", type number}, {"Nome do Fiscal", type text}, {"Nº das PER/DCOMP vinculadas", type text}, {"Processo de Cobrança", type text}, {"Erro_Obrigatorios", type logical}, {"Erro_Formato_Datas", type logical}, {"Erro_Formato_Valores", type logical}, {"Erro_Formato_Documentos", type logical}, {"Erro_Formato_Textos", type logical}, {"Erro_Formato_Fiscal", type logical}, {"Erro_Formato_Lista_T", type logical}, {"Erro_Formato_Lista_U", type logical}, {"Possui Pendência? ", type logical}, {"CLASSIFICAÇÃO", type text}}),
     #"Colunas Renomeadas" = Table.RenameColumns(#"Tipo Alterado",{{"Nome da Origem", "Localização"}}),
-    #"Valor Substituído" = Table.ReplaceValue(#"Colunas Renomeadas",null,"",Replacer.ReplaceValue,{"Fonte"}),
-    #"Valor Substituído1" = Table.ReplaceValue(#"Valor Substituído",null,"",Replacer.ReplaceValue,{"Cod. Rastreamento Correios"}),
-    #"Valor Substituído2" = Table.ReplaceValue(#"Valor Substituído1",null,"",Replacer.ReplaceValue,{"Nº da comunicação"}),
-    #"Valor Substituído3" = Table.ReplaceValue(#"Valor Substituído2",null,"",Replacer.ReplaceValue,{"DRF"}),
-    Personalizar1 = Table.AddColumn(#"Valor Substituído3", "CNPJ_Limpo", each fxLimparCNPJ([#"CNPJ/CPF"])),
+    #"substituir null1" = Table.ReplaceValue(#"Colunas Renomeadas",null,"",Replacer.ReplaceValue,{"Fonte"}),
+    #"substituir null2" = Table.ReplaceValue(#"substituir null1",null,"",Replacer.ReplaceValue,{"Cod. Rastreamento Correios"}),
+    #"substituir null3" = Table.ReplaceValue(#"substituir null2",null,"",Replacer.ReplaceValue,{"Nº da comunicação"}),
+    #"substituir null4" = Table.ReplaceValue(#"substituir null3",null,"",Replacer.ReplaceValue,{"DRF"}),
+    Limpar CNPJ = Table.AddColumn(#"substituir null4", "CNPJ_Limpo", each fxLimparCNPJ([#"CNPJ/CPF"])),
     #"Personalização Adicionada" = Table.AddColumn(Personalizar1, "CNPJ/CPF FORMATADO", each if Text.Length([CNPJ_Limpo]) = 14 then
     Text.Range([CNPJ_Limpo],0,2) & "." &
     Text.Range([CNPJ_Limpo],2,3) & "." &
