@@ -4,56 +4,78 @@
 ![SQL](https://img.shields.io/badge/SQL-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
 ![Power Query](https://img.shields.io/badge/Power_Query-000000?style=for-the-badge&logo=json&logoColor=white)
 
-📊 Projeto de Centralização e Saneamento de 5 anos de dados Financeiros/Jurídicos
+📊 5-Year Financial & Legal Data Centralization & Cleansing Project
 
-🎯 O Desafio de Negócio: 
-O departamento jurídico enfrentava dificuldades na consolidação de dados de créditos tributários provenientes de múltiplas planilhas mensais descentralizadas. Os principais problemas eram:
+🎯 The Business Challenge
 
-- Duplicidade de Clientes e CNPJ: O mesmo cliente aparecia com grafias diferentes em arquivos diferentes (ex: "Empresa X Ltda", "Empresa X", "Empresa X - 123"), impedindo uma visão consolidada.
-- Processo Manual: Inexistência de qualquer dashboard impedindo análise de qualquer natureza (financeira, volume de trabalho, tempo e sazonalidade de demanda) por 5 anos.
-- Conexão de Dados Complexa: Dificuldade em cruzar dados de processos jurídicos (base interna) com dados de faturamento e honorários (dataset financeiro externo) devido à falta de chaves únicas padronizadas.
+The Legal Department struggled to consolidate tax credit data scattered across multiple decentralized monthly spreadsheets. The critical pain points were:
 
-💡 A Solução Implementada
+Entity Duplication & Inconsistency: The same client appeared with different naming conventions across files (e.g., "Company X Ltd", "Company X", "Company X - 123"), making a consolidated view impossible.
 
-Desenvolvi uma solução de BI ponta a ponta ("End-to-End") focada em Engenharia de Dados no Power Query para garantir a integridade da informação antes da visualização.
+Manual Process & Blind Spots: For 5 years, the lack of a centralized dashboard prevented any strategic analysis regarding finance, workload volume, or demand seasonality.
 
-🛠️ Principais Técnicas Utilizadas
-1. ETL Automático (SharePoint)
-Implementei uma conexão direta com a Pasta do SharePoint da empresa.
-Criei um script em Linguagem M que detecta automaticamente novos arquivos mensais (.xlsx), filtra arquivos temporários ou de controle, e combina os dados em uma única tabela fato (fBaseCreditos).
-O sistema é 100% automático: basta salvar o arquivo na pasta e o painel se atualiza.
+Complex Data Integration: inability to cross-reference Legal Proceedings data (internal database) with Billing & Fees data (external financial dataset) due to the lack of standardized unique keys.
 
-2. Algoritmo de Padronização de Clientes (Deduplicação)
-Para resolver a duplicidade de nomes, criei uma lógica avançada no Power Query (Dim_Clientes_Final) que:
+💡 The Solution
 
-- Identifica todos os CNPJs únicos na base.
-- Agrupa todas as variações de nomes encontradas para aquele CNPJ.
-- Aplica uma lógica para selecionar automaticamente o nome mais completo (maior string de texto) como o "Nome Oficial".
-- Realiza uma limpeza robusta de caracteres especiais e números indesejados nos nomes.
-- Identifica novos clientes/CNPJ acrescentados na base e faz a limpeza antes da inserção na tabela fato para evitar contaminação da base que alimenta os visuais.
+I developed an End-to-End BI Solution with a heavy focus on Data Engineering within Power Query to guarantee information integrity before any visualization took place.
 
-Resultado: Uma dimensão de clientes única e limpa que retroalimenta a tabela fato, eliminando duplicatas nos relatórios.
+🛠️ Key Techniques Implemented
 
-3. Modelagem de Dados (Star Schema & Bridge Tables)
-Criação de uma tabela dimensão calendário (dCalendario) para análises temporais.
+1. Automated ETL (SharePoint Integration) I implemented a direct connection to the company's SharePoint Folder. I wrote a custom M Language Script that:
 
-Resolução de relacionamentos complexos ("Muitos-para-Muitos") entre Notas Fiscais e Processos utilizando uma tabela ponte de CNPJs únicos (Dim_CNPJ_CPF) criada via DAX, garantindo a integridade dos filtros cruzados.
+Automatically detects new monthly files (.xlsx).
 
-🛡️ Governança e Data Quality Control
-Para garantir a confiabilidade dos dados apresentados, foi desenvolvido um painel exclusivo de Controle de Qualidade de Dados.
+Filters out temporary or control files.
 
-Funcionalidades de Auditoria:
-Rastreabilidade de Origem: Implementação de colunas de metadados (Localização e Emissão) no Power Query que identificam exatamente de qual arquivo mensal (ex: "AGOSTO 2025.xlsx") cada registro se originou.
+Combines data into a single Fact Table (fBaseCreditos).
 
-Detecção de Inconsistências:
--Monitoramento de CNPJs inválidos ou nulos.
--Validação cruzada entre a base de Créditos e a base de Notas Fiscais.
--Alertas visuais para registros que falharam na padronização automática.
--Preenchimento Reverso (Data Healing): Algoritmo que utiliza a base histórica de clientes validados (Dim_Clientes_Final) para preencher automaticamente informações faltantes (como CNPJs nulos) na base de fatos, baseado no nome do cliente.
+Zero-Touch Update: The system is 100% automated; users simply save the file in the folder, and the dashboard updates.
 
-📂 Estrutura dos Arquivos
-Este repositório contém apenas os scripts de lógica (devido à confidencialidade dos dados):
+2. Client Standardization Algorithm (Deduplication Logic) To solve the naming duplication, I created advanced logic in Power Query (Dim_Customers_Final) acting as a Master Data Management (MDM) layer:
 
-ETL_Padronizacao_Clientes.m: Lógica de limpeza e deduplicação de clientes.
-ETL_Ingestao_Automatica.m: Script de conexão e combinação de arquivos do SharePoint.
-Medidas_e_Modelagem.dax: Principais métricas e tabelas calculadas.
+Unique Identification: Scans for unique Tax IDs (CNPJs) across the entire dataset.
+
+Grouping & Selection: Groups all naming variations for a specific ID and applies logic to automatically select the most complete name (longest string) as the "Official Name".
+
+Sanitization: Performs robust cleaning of special characters and unwanted numbers.
+
+New Entry Handling: Identifies and cleans new clients/CNPJs before they enter the Fact Table to prevent contamination.
+
+Result: A clean, unique Customer Dimension that feeds back into the Fact Table, eliminating duplicates in reports.
+
+3. Data Modeling (Star Schema & Bridge Tables)
+
+Implementation of a standard Star Schema with a dedicated Date Dimension (dCalendar).
+
+Complex Relationship Handling: Solved "Many-to-Many" relationships between Invoices and Lawsuits using a Bridge Table of unique IDs (Dim_CNPJ_CPF) created via DAX, ensuring accurate cross-filtering.
+
+🛡️ Governance & Data Quality Control (DQC)
+
+To ensure trust in the data, I built an exclusive Data Quality Dashboard:
+
+Audit & Lineage:
+
+Source Traceability: Implemented metadata columns in Power Query to track exactly which monthly file (e.g., "AUGUST 2025.xlsx") every single record originated from.
+
+Anomaly Detection:
+
+Monitoring of invalid or null Tax IDs.
+
+Cross-validation between the Credit Base and the Invoices Base.
+
+Visual alerts for records that failed automatic standardization.
+
+Algorithmic Data Healing:
+
+Reverse Filling: A logic that uses the validated historical customer base (Dim_Customers_Final) to automatically backfill missing information (such as null IDs in older records) in the Fact Table based on the client's name match.
+
+📂 Repository Structure
+
+Note: This repository contains only logic scripts due to data confidentiality (NDA).
+
+ETL_Client_Standardization.m: Logic for client cleaning and deduplication.
+
+ETL_Auto_Ingestion.m: Script for SharePoint connection and file combination.
+
+Measures_and_Modeling.dax: Key metrics and calculated tables.
